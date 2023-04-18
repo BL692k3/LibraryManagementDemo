@@ -83,7 +83,7 @@ public class LoginView extends JFrame implements ActionListener {
         if (validateCredentials(username, password)) {
             // If the credentials are valid, set the "currentUser" session variable
             UserController userController = new UserController();
-            User user = new User(username, password, userController.getUserRole(username));
+            User user = userController.getUser(username);
             SessionManager.getInstance().put("currentUser", user);
             JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
             IndexView indexView = new IndexView();

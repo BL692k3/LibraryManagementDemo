@@ -16,6 +16,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import models.User;
+import utils.PasswordHasher;
 
 public class UserView extends JPanel {
     private JTable table;
@@ -125,7 +126,7 @@ public class UserView extends JPanel {
         private JTextField nameField;
         private JTextField emailField;
         private JTextField usernameField;
-        private JTextField passwordField;
+        private JPasswordField passwordField;
         private JButton saveButton;
         private JButton cancelButton;
 
@@ -162,25 +163,31 @@ public class UserView extends JPanel {
 
             // Create the password label and field
             JLabel passwordLabel = new JLabel("Password:");
-            passwordField = new JTextField(user.getPassword());
+            passwordField = new JPasswordField();
             add(passwordLabel);
             add(passwordField);
 
             // Create the save button
             saveButton = new JButton("Save");
             saveButton.addActionListener(e -> {
-                // Update the user's information in the database
+                // Update the user's information in the User object
                 user.setName(nameField.getText());
                 user.setEmail(emailField.getText());
                 user.setUsername(usernameField.getText());
-                user.setPassword(passwordField.getText());
-                userController.updateUser(user);
+                user.setPassword(PasswordHasher.hashPassword(new String(passwordField.getPassword())));
 
-                // Refresh the table
-                displayAllUsers(userController.getAllUsers());
+                // Update the user's information in the database
+                boolean success = userController.updateUser(user);
 
-                // Close the dialog
-                dispose();
+                if (success) {
+                    // Refresh the table
+                    displayAllUsers(userController.getAllUsers());
+
+                    // Close the dialog
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Failed to update user information. Please try again.");
+                }
             });
 
             // Create the cancel button

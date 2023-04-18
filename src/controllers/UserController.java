@@ -11,6 +11,7 @@ import models.User;
 import utils.PasswordHasher;
 
 public class UserController {
+    private static final String USERS_FILE = "users.txt";
     private List<User> userList;
 
     public UserController() {
@@ -51,7 +52,7 @@ public class UserController {
             System.out.println("Failed to read user data from file: " + e.getMessage());
             return false;
         }
-
+        
         // Set the new user's id to the last user's id + 1
         user.setId(lastUserId + 1);
 
@@ -168,11 +169,19 @@ public class UserController {
             return false;
         }
 
+        // If the user to update was not found in the file, return false
+        if (!users.contains(user)) {
+            return false;
+        }
+
         try (FileWriter fileWriter = new FileWriter("users.txt")) {
+            StringBuilder sb = new StringBuilder();
             for (User u : users) {
-                String userString = u.getId() + "," + u.getName() + "," + u.getEmail() + "," + u.getUsername() + "," + u.getPassword() + "," + u.getUserRole() + "\n";
-                fileWriter.write(userString);
+                sb.append(u.getId()).append(",").append(u.getName()).append(",").append(u.getEmail())
+                  .append(",").append(u.getUsername()).append(",").append(u.getPassword())
+                  .append(",").append(u.getUserRole()).append("\n");
             }
+            fileWriter.write(sb.toString());
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -180,6 +189,32 @@ public class UserController {
         }
     }
     
+    public User getUser(String username) {
+        try (BufferedReader br = new BufferedReader(new FileReader(USERS_FILE))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] userDetails = line.split(",");
+                if (userDetails.length >= 5 && userDetails[3].equals(username)) {
+                    int id = Integer.parseInt(userDetails[0]);
+                    String name = userDetails[1];
+                    String email = userDetails[2];
+                    String userUsername = userDetails[3];
+                    String password = userDetails[4];
+
+                    if (userDetails.length == 6) {
+                        String userRole = userDetails[5];
+                        return new User(id, name, email, userUsername, password, userRole);
+                    } else {
+                        return new User(id, name, email, userUsername, password);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public String getUserRole(String username) {
         String userRole = null;
         try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
