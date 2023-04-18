@@ -17,8 +17,11 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import models.Book;
+import models.User;
+import utils.SessionManager;
 
 public class BookView extends JPanel {
     private BookController bookController;
@@ -30,7 +33,7 @@ public class BookView extends JPanel {
 
     public BookView(BookController bookController) {
         this.bookController = bookController;
-
+        User currentUser = (User) SessionManager.getInstance().get("currentUser");
         // Create the non-editable table model
         tableModel = new DefaultTableModel() {
             @Override
@@ -43,70 +46,74 @@ public class BookView extends JPanel {
         bookTable = new JTable(tableModel);
 
         JScrollPane scrollPane = new JScrollPane(bookTable);
+        
+        // Add the CRUD buttons for only for users with "ADM" role
+        if (currentUser.getUserRole() != null && currentUser.getUserRole().equals("ADM")) {
+            // Create the panel for the buttons
+            JPanel buttonPanel = new JPanel(new FlowLayout());
 
-        // Create the panel for the buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+            // Create the add button and add an action listener
+            addButton = new JButton("Add");
+            addButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Open a dialog to add a new book
+                    BookDialog bookDialog = new BookDialog(bookController);
+                    bookDialog.setVisible(true);
+                }
+            });
+            buttonPanel.add(addButton);
 
-        // Create the add button and add an action listener
-        addButton = new JButton("Add");
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open a dialog to add a new book
-                BookDialog bookDialog = new BookDialog(bookController);
-                bookDialog.setVisible(true);
-            }
-        });
-        buttonPanel.add(addButton);
+            // Create the delete button and add an action listener
+            deleteButton = new JButton("Delete");
+            deleteButton.setEnabled(false);
+            deleteButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int selectedRow = bookTable.getSelectedRow();
+                    int id = (int) tableModel.getValueAt(selectedRow, 0);
+                    bookController.removeBook(id);
+                    deleteButton.setEnabled(false);
+                    updateButton.setEnabled(false);
+                    displayAllBooks(bookController.getAllBooks());
+                }
+            });
+            buttonPanel.add(deleteButton);
 
-        // Create the delete button and add an action listener
-        deleteButton = new JButton("Delete");
-        deleteButton.setEnabled(false);
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = bookTable.getSelectedRow();
-                int id = (int) tableModel.getValueAt(selectedRow, 0);
-                bookController.removeBook(id);
-                deleteButton.setEnabled(false);
-                updateButton.setEnabled(false);
-                displayAllBooks(bookController.getAllBooks());
-            }
-        });
-        buttonPanel.add(deleteButton);
+            // Create the update button and add an action listener
+            updateButton = new JButton("Update");
+            updateButton.setEnabled(false);
+            updateButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int selectedRow = bookTable.getSelectedRow();
+                    int id = (int) tableModel.getValueAt(selectedRow, 0);
 
-        // Create the update button and add an action listener
-        updateButton = new JButton("Update");
-        updateButton.setEnabled(false);
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = bookTable.getSelectedRow();
-                int id = (int) tableModel.getValueAt(selectedRow, 0);
+                    // Get the book by ID and open a dialog to update it
+                    Book book = bookController.getBookById(id);
+                    BookDialog bookDialog = new BookDialog(bookController, book);
+                    bookDialog.setVisible(true);
 
-                // Get the book by ID and open a dialog to update it
-                Book book = bookController.getBookById(id);
-                BookDialog bookDialog = new BookDialog(bookController, book);
-                bookDialog.setVisible(true);
+                    deleteButton.setEnabled(false);
+                    updateButton.setEnabled(false);
+                }
+            });
+            buttonPanel.add(updateButton);
 
-                deleteButton.setEnabled(false);
-                updateButton.setEnabled(false);
-            }
-        });
-        buttonPanel.add(updateButton);
+            // Add the scroll pane and button panel to the view
+            setLayout(new BorderLayout());
+            add(scrollPane, BorderLayout.CENTER);
+            add(buttonPanel, BorderLayout.SOUTH);
 
-        // Add the scroll pane and button panel to the view
-        setLayout(new BorderLayout());
+            // Add a selection listener to the table to enable/disable the delete and update buttons
+            bookTable.getSelectionModel().addListSelectionListener(e -> {
+                boolean enabled = bookTable.getSelectedRow() != -1;
+                deleteButton.setEnabled(enabled);
+                updateButton.setEnabled(enabled);
+            });
+        } 
         add(scrollPane, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        // Add a selection listener to the table to enable/disable the delete and update buttons
-        bookTable.getSelectionModel().addListSelectionListener(e -> {
-            boolean enabled = bookTable.getSelectedRow() != -1;
-            deleteButton.setEnabled(enabled);
-            updateButton.setEnabled(enabled);
-        });
-
+        
         displayAllBooks(bookController.getAllBooks()); // display all books when the view is created
     }
 
@@ -117,7 +124,7 @@ public class BookView extends JPanel {
             tableModel.addRow(rowData);
         }
     }
-        private class BookDialog extends JDialog {
+    private class BookDialog extends JDialog {
         private JTextField titleField;
         private JTextField authorField;
         private JTextField descriptionField;
@@ -165,6 +172,17 @@ public class BookView extends JPanel {
             // Create the save button
             saveButton = new JButton("Save");
             saveButton.addActionListener(e -> {
+                // Validate the quantity input
+                int quantity;
+                try {
+                    quantity = Integer.parseInt(quantityField.getText());
+                    if (quantity <= 0) {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Quantity must be a positive integer.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 // Create a new book with the entered information
                 Book book = new Book(0, titleField.getText(), authorField.getText(), descriptionField.getText(), Integer.parseInt(quantityField.getText()));
 
