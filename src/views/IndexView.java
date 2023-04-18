@@ -55,7 +55,6 @@ public class IndexView extends JFrame {
         tabbedPane = new JTabbedPane();
         userView = new UserView();
         bookView = new BookView(new BookController());
-        System.out.println(currentUser.getUserRole());
         
         // Create a panel for the logout button
         JPanel logoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
