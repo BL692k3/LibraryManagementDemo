@@ -51,6 +51,7 @@ public class LoginView extends JFrame implements ActionListener {
         // Add the registerButton
         registerButton = new JButton("Create an account");
         registerButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 RegistrationView registerView = new RegistrationView();
                 setVisible(false);

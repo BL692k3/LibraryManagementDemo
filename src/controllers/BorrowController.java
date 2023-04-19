@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import models.Book;
 import models.Borrow;
 import models.User;
@@ -18,13 +19,11 @@ import views.BorrowView;
 
 public class BorrowController {
     private List<Borrow> borrowList;
-    private BorrowView borrowView;
     private BookController bookController;
     private UserController userController;
 
     public BorrowController() {
         borrowList = new ArrayList<>();
-        borrowView = new BorrowView(this);
         this.bookController = new BookController();
         this.userController = new UserController();
         // Read the borrow data from file and add it to the borrow list
@@ -48,24 +47,24 @@ public class BorrowController {
     }
 
     // Add a borrow to the list and text file
-    public void addBorrow(int userId, int bookId) {
+    public boolean addBorrow(int userId, int bookId) {
         UserController userController = new UserController();
         BookController bookController = new BookController();
         // Check if the user can borrow the book
         User user = userController.getUserById(userId);
         Book book = bookController.getBookById(bookId);
         if (user == null || book == null) {
-            borrowView.displayErrorMessage("Invalid user or book ID.");
-            return;
+            displayErrorMessage("Invalid user or book ID.");
+            return false;
         }
         if (book.getQuantity() == 0) {
-            borrowView.displayErrorMessage("The book is out of stock.");
-            return;
+            displayErrorMessage("The book is out of stock.");
+            return false;
         }
         for (Borrow borrow : borrowList) {
             if (borrow.getUserId() == userId && borrow.getBookId() == bookId) {
-                borrowView.displayErrorMessage("The user has already borrowed this book.");
-                return;
+                displayErrorMessage("The user has already borrowed this book.");
+                return false;
             }
         }        
         // Create the borrow and save it to the list and text file
@@ -88,14 +87,15 @@ public class BorrowController {
             System.err.println("Error writing to file: " + e.getMessage());
         }
 
-        borrowView.displaySuccessMessage("The book has been borrowed successfully.");
+        displaySuccessMessage("The book has been borrowed successfully.");
+        return false;
     }
 
     // Return a book and update the list and text file
     public void returnBook(int borrowId) {
         Borrow borrow = getBorrowById(borrowId);
         if (borrow == null) {
-            borrowView.displayErrorMessage("Invalid borrow ID.");
+            displayErrorMessage("Invalid borrow ID.");
             return;
         }
 
@@ -118,7 +118,7 @@ public class BorrowController {
             System.err.println("Error writing to file: " + e.getMessage());
         }
 
-        borrowView.displaySuccessMessage("The book has been returned successfully.");
+        displaySuccessMessage("The book has been returned successfully.");
     }
 
     // Get a borrow by ID
@@ -184,5 +184,14 @@ public class BorrowController {
     //Returns a borrow list when called
     public List<Borrow> getBorrowList() {
         return borrowList;
+    }
+    // Display an error message in a dialog box
+    public void displayErrorMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Display a success message in a dialog box
+    public void displaySuccessMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 }

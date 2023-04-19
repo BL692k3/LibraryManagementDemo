@@ -17,8 +17,6 @@ public class BookController {
 
     public BookController() {
         bookList = new ArrayList<>();
-        bookView = new BookView(this);
-        
         // Read the book data from file and add it to the book list
         try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
             String line;

@@ -60,7 +60,7 @@ public class IndexView extends JFrame {
 
         tabbedPane = new JTabbedPane();
         userView = new UserView();
-        bookView = new BookView(new BookController());
+        bookView = new BookView();
         borrowView = new BorrowView(new BorrowController());
 
         // Create a panel for the logout and edit profile buttons

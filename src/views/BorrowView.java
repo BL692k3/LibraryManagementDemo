@@ -16,12 +16,10 @@ import models.User;
 import utils.SessionManager;
 
 public class BorrowView extends JPanel{
-    private BorrowController borrowController;
     private JTable table;
     private DefaultTableModel model;
 
     public BorrowView(BorrowController borrowController) {
-        this.borrowController = borrowController;
         User currentUser = (User) SessionManager.getInstance().get("currentUser"); 
         setLayout(new BorderLayout(0, 0));
 
@@ -41,6 +39,7 @@ public class BorrowView extends JPanel{
     }
 
     void displayAllBorrows(List<Borrow> borrowList) {
+        BorrowController borrowController = new BorrowController();
         model.setRowCount(0); // clear the table before adding new rows
         for (Borrow borrow : borrowList) {
             int borrowId = borrow.getId();
@@ -52,15 +51,5 @@ public class BorrowView extends JPanel{
 
             model.addRow(new Object[]{borrowId, bookName, userName, borrowDate, returnDate, overdue});
         }
-    }
-    
-    // Display an error message in a dialog box
-    public void displayErrorMessage(String message) {
-        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    // Display a success message in a dialog box
-    public void displaySuccessMessage(String message) {
-        JOptionPane.showMessageDialog(null, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 }

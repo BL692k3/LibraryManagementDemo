@@ -1,10 +1,10 @@
-1,Java Programming,John Doe,A book about Java,10
+1,Java Programming,John Doe,A book about Java,9
 2,Python Programming,Jane Doe,A book about Python,5
 3,C++ Programming,Bob Smith,A book about C++,15
 4,JavaScript Programming,Alice Jones,A book about JavaScript,8
-5,PHP Programming,Mike Brown,A book about PHP,20
+5,PHP Programming,Mike Brown,A book about PHP,19
 6,Ruby Programming,Sarah Lee,A book about Ruby,3
-7,Swift Programming,David Kim,A book about Swift,12
-8,SQL Programming,Karen Chen,A book about SQL,7
-9,HTML Programming,James Lee,A book about HTML,18
+7,Swift Programming,David Kim,A book about Swift,11
+8,SQL Programming,Karen Chen,A book about SQL,6
+9,HTML Programming,James Lee,A book about HTML,17
 10,CSS Programming,Emily Wang,A book about CSS,8

@@ -1,8 +1,4 @@
 package models;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import utils.PasswordHasher;
 /**
  *
  * @author Admin
@@ -31,18 +27,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.userRole = userRole;
-    }
-    
-    public User(String username, String password, String userRole) {
-        this.username = username;
-        this.password = password;
-        this.userRole = userRole;
-    }
-
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
     }
 
     // Getters and setters
