@@ -12,6 +12,8 @@ import java.awt.BorderLayout;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import models.User;
+import utils.SessionManager;
 
 public class BorrowView extends JPanel{
     private BorrowController borrowController;
@@ -20,14 +22,18 @@ public class BorrowView extends JPanel{
 
     public BorrowView(BorrowController borrowController) {
         this.borrowController = borrowController;
-
+        User currentUser = (User) SessionManager.getInstance().get("currentUser"); 
         setLayout(new BorderLayout(0, 0));
 
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, BorderLayout.CENTER);
 
         table = new JTable();
-        model = new DefaultTableModel(new Object[][]{}, new String[]{"ID", "Book Name", "User Name", "Borrow Date", "Return Date", "Overdue"});
+        model = new DefaultTableModel(new Object[][]{}, new String[]{"ID", "Book Name", "User Name", "Borrow Date", "Return Date", "Overdue"}){@Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // make all cells non-editable
+            }
+        };
         table.setModel(model);
         scrollPane.setViewportView(table);
 
@@ -47,6 +53,7 @@ public class BorrowView extends JPanel{
             model.addRow(new Object[]{borrowId, bookName, userName, borrowDate, returnDate, overdue});
         }
     }
+    
     // Display an error message in a dialog box
     public void displayErrorMessage(String message) {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);

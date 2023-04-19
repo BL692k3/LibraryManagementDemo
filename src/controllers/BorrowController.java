@@ -25,7 +25,8 @@ public class BorrowController {
     public BorrowController() {
         borrowList = new ArrayList<>();
         borrowView = new BorrowView(this);
-        
+        this.bookController = new BookController();
+        this.userController = new UserController();
         // Read the borrow data from file and add it to the borrow list
         try (BufferedReader reader = new BufferedReader(new FileReader("borrows.txt"))) {
             String line;
@@ -183,5 +184,5 @@ public class BorrowController {
     //Returns a borrow list when called
     public List<Borrow> getBorrowList() {
         return borrowList;
-    }   
+    }
 }
