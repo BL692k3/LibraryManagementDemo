@@ -1,5 +1,3 @@
-
-
 import views.LoginView;
 /**
  *
@@ -7,7 +5,7 @@ import views.LoginView;
  */
 public class Main {
     public static void main(String[] args) {
-        //LoginView
-        LoginView loginView = new LoginView();
+        /*//LoginView
+        LoginView loginView = new LoginView();*/
     }
 }

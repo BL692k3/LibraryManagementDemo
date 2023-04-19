@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import controllers.BookController;
+import controllers.BorrowController;
 import controllers.UserController;
 import models.Book;
+import models.Borrow;
 import models.User;
 import utils.PasswordHasher;
 import utils.SessionManager;
@@ -20,8 +22,10 @@ public class IndexView extends JFrame {
     private JTabbedPane tabbedPane;
     private UserView userView;
     private BookView bookView;
+    private BorrowView borrowView;
 
     private UserController userController;
+    private BorrowController borrowController;
 
     // regex patterns for input validation
     private final Pattern namePattern = Pattern.compile("^[a-zA-Z ]+$");
@@ -57,6 +61,7 @@ public class IndexView extends JFrame {
         tabbedPane = new JTabbedPane();
         userView = new UserView();
         bookView = new BookView(new BookController());
+        borrowView = new BorrowView(new BorrowController());
 
         // Create a panel for the logout and edit profile buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -70,7 +75,7 @@ public class IndexView extends JFrame {
             }
         });
         buttonPanel.add(editProfileButton);
-        
+
         JButton logoutButton = new JButton("Logout");
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -94,6 +99,9 @@ public class IndexView extends JFrame {
         // Add the "Books" tab for all logged-in users
         tabbedPane.addTab("Books", bookView);
 
+        // Add the "Borrow" tab for all logged-in users
+        tabbedPane.addTab("Borrow", borrowView);
+
         add(tabbedPane);
         setVisible(true);
     }
@@ -104,6 +112,10 @@ public class IndexView extends JFrame {
 
     public void displayAllBooks(List<Book> bookList) {
         bookView.displayAllBooks(bookList);
+    }
+
+    public void displayAllBorrows(List<Borrow> borrowList) {
+        borrowView.displayAllBorrows(borrowList);
     }
 
     @Override

@@ -1,4 +1,4 @@
-1,ADM,admin@example.com,Admin,c1c224b03cd9bc7b6a86d77f5dace40191766c485cd55dc48caf9ac873335d6f,ADM
-2,Alice,alice@example.com,AliceInWonderland,0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e,MEM
-3,Bruh,bob@example.com,BobCat,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8,MEM
-4,Bruh,Lol@gmail.com,Username,16f78a7d6317f102bbd95fc9a4f3ff2e3249287690b8bdad6b7810f82b34ace3,MEM
+1,ADM,admin@example.com,Admin,499cf49eaa5ddaa67f72d0fab8f7d97f5d4aabecd37ce36df80ef57b8121dfc5,ADM
+2,Sarah Johnson,johnson.sarah@gmail.com,sarahj,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,MEM
+3,Michael Lee,lee.michael@yahoo.com,mikelee,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,MEM
+4,Emily Davis,davis.emily@hotmail.com,emilyd,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,MEM
