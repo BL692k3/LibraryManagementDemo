@@ -1,5 +1,6 @@
 package views;
 
+import Exceptions.ValidationException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -81,7 +82,8 @@ public class LoginView extends JFrame implements ActionListener {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        if (validateCredentials(username, password)) {
+        try {
+            if (validateCredentials(username, password)) {
             // If the credentials are valid, set the "currentUser" session variable
             UserController userController = new UserController();
             User user = userController.getUser(username);
@@ -91,8 +93,11 @@ public class LoginView extends JFrame implements ActionListener {
             setVisible(false);
             indexView.setVisible(true);
             dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "The username doesn't exist or the password is wrong. Please try again.");
+            } else {
+                throw new ValidationException("The username doesn't exist or the password is wrong. Please try again.");
+            }
+        } catch (ValidationException ve) {
+            JOptionPane.showMessageDialog(this, ve.getMessage());
         }
     }
 
