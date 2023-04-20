@@ -175,7 +175,7 @@ public class UserView extends JPanel {
                 user.setEmail(emailField.getText());
                 user.setUsername(usernameField.getText());
                 user.setPassword(PasswordHasher.hashPassword(new String(passwordField.getPassword())));
-
+                System.out.println(user.getId()+user.getUsername());
                 // Update the user's information in the database
                 boolean success = userController.updateUser(user);
 

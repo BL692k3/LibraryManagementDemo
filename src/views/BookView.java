@@ -206,6 +206,7 @@ public class BookView extends JPanel {
                     JOptionPane.showMessageDialog(this, "Quantity must be a positive integer.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                
                 // Create a new book with the entered information
                 Book book = new Book(0, titleField.getText(), authorField.getText(), descriptionField.getText(), Integer.parseInt(quantityField.getText()));
 

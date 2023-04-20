@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 import models.Book;
 import models.Borrow;
 import models.User;
-import views.BorrowView;
 
 public class BorrowController {
     private List<Borrow> borrowList;

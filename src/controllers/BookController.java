@@ -37,6 +37,7 @@ public class BookController {
     
     // Add a book to the list and text file
     public void addBook(Book book) {
+        BookView bookView = new BookView();
         if (bookList.isEmpty()) { // check if the list is empty
             bookList.add(book);
         } else {
@@ -55,6 +56,7 @@ public class BookController {
 
     // Remove a book from the list and text file
     public void removeBook(int id) {
+        BookView bookView = new BookView();
         for (Book book : bookList) {
             if (book.getId() == id) {
                 bookList.remove(book);

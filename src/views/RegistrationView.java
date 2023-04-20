@@ -9,7 +9,6 @@ import java.io.IOException;
 import javax.swing.*;
 import controllers.UserController;
 import models.User;
-import utils.PasswordHasher;
 
 public class RegistrationView extends JFrame implements ActionListener {
 
@@ -101,9 +100,6 @@ public class RegistrationView extends JFrame implements ActionListener {
                 return;
             }
 
-            // Hash the password
-            String hashedPassword = PasswordHasher.hashPassword(password);
-
             // Get the id for the new user
             int id = 1;
             try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
@@ -118,7 +114,7 @@ public class RegistrationView extends JFrame implements ActionListener {
             }
 
             // Create a new user
-            User newUser = new User(id, name, email, username, hashedPassword);
+            User newUser = new User(id, name, email, username, password);
 
             // Add the user to the system...
             boolean success = userController.addUser(newUser);
