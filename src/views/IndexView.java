@@ -9,7 +9,6 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import controllers.BookController;
 import controllers.BorrowController;
 import controllers.UserController;
 import models.Book;
@@ -25,7 +24,7 @@ public class IndexView extends JFrame {
     private BorrowView borrowView;
 
     private UserController userController;
-    private BorrowController borrowController;
+    private BorrowController borrowController = new BorrowController();
 
     // regex patterns for input validation
     private final Pattern namePattern = Pattern.compile("^[a-zA-Z ]+$");
@@ -61,7 +60,7 @@ public class IndexView extends JFrame {
         tabbedPane = new JTabbedPane();
         userView = new UserView();
         bookView = new BookView();
-        borrowView = new BorrowView(new BorrowController());
+        borrowView = new BorrowView();
 
         // Create a panel for the logout and edit profile buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -105,6 +104,7 @@ public class IndexView extends JFrame {
         add(tabbedPane);
         setVisible(true);
     }
+
 
     public void displayAllUsers(List<User> userList) {
         userView.displayAllUsers(userList);

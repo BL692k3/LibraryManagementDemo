@@ -13,7 +13,6 @@ import views.BookView;
 
 public class BookController {
     private List<Book> bookList;
-    private BookView bookView;
 
     public BookController() {
         bookList = new ArrayList<>();
@@ -79,6 +78,23 @@ public class BookController {
 
     // Get all books in the list
     public List<Book> getAllBooks() {
+        bookList.clear(); // Clear the current bookList
+        // Read the book data from file and add it to the book list
+        try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                int id = Integer.parseInt(parts[0]);
+                String title = parts[1];
+                String author = parts[2];
+                String description = parts[3];
+                int quantity = Integer.parseInt(parts[4]);
+                Book book = new Book(id, title, author, description, quantity);
+                bookList.add(book);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading from file: " + e.getMessage());
+        }
         return bookList;
     }
 

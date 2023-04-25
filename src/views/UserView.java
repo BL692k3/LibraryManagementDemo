@@ -170,12 +170,39 @@ public class UserView extends JPanel {
             // Create the save button
             saveButton = new JButton("Save");
             saveButton.addActionListener(e -> {
+                // Get the input values from the fields
+                String name = nameField.getText().trim();
+                String email = emailField.getText().trim();
+                String username = usernameField.getText().trim();
+                String password = new String(passwordField.getPassword()).trim();
+
+                // Validate the input values
+                if (!name.matches("^[a-zA-Z ]+$")) {
+                    JOptionPane.showMessageDialog(this, "Name should contain only letters and spaces.");
+                    return;
+                }
+
+                if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                    JOptionPane.showMessageDialog(this, "Email should be a valid email address.");
+                    return;
+                }
+
+                if (!username.matches("^[a-zA-Z]+$")) {
+                    JOptionPane.showMessageDialog(this, "Username should contain only letters.");
+                    return;
+                }
+
+                if (password.length() < 6 || password.length() > 12) {
+                    JOptionPane.showMessageDialog(this, "Password should be between 6 and 12 characters long.");
+                    return;
+                }
+
                 // Update the user's information in the User object
-                user.setName(nameField.getText());
-                user.setEmail(emailField.getText());
-                user.setUsername(usernameField.getText());
-                user.setPassword(PasswordHasher.hashPassword(new String(passwordField.getPassword())));
-                System.out.println(user.getId()+user.getUsername());
+                user.setName(name);
+                user.setEmail(email);
+                user.setUsername(username);
+                user.setPassword(PasswordHasher.hashPassword(password));
+
                 // Update the user's information in the database
                 boolean success = userController.updateUser(user);
 

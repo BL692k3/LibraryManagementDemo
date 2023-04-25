@@ -15,12 +15,13 @@ import javax.swing.JOptionPane;
 import models.Book;
 import models.Borrow;
 import models.User;
+import views.BorrowView;
+
 
 public class BorrowController {
     private List<Borrow> borrowList;
     private BookController bookController;
     private UserController userController;
-
     public BorrowController() {
         borrowList = new ArrayList<>();
         this.bookController = new BookController();
@@ -47,6 +48,7 @@ public class BorrowController {
 
     // Add a borrow to the list and text file
     public boolean addBorrow(int userId, int bookId) {
+        BorrowView borrowView = new BorrowView();
         UserController userController = new UserController();
         BookController bookController = new BookController();
         // Check if the user can borrow the book
@@ -86,12 +88,15 @@ public class BorrowController {
             System.err.println("Error writing to file: " + e.getMessage());
         }
 
+        // Update borrow list
+        borrowList.add(borrow);
         displaySuccessMessage("The book has been borrowed successfully.");
         return false;
     }
 
     // Return a book and update the list and text file
     public void returnBook(int borrowId) {
+        BorrowView borrowView = new BorrowView();
         Borrow borrow = getBorrowById(borrowId);
         if (borrow == null) {
             displayErrorMessage("Invalid borrow ID.");
@@ -111,13 +116,18 @@ public class BorrowController {
         // Save the borrow to the text file
         try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("borrows.txt")))) {
             for (Borrow b : borrowList) {
-                writer.println(b.getId() + "," + b.getUserId() + "," + b.getBookId() + "," + new SimpleDateFormat("yyyy-MM-dd").format(b.getBorrowDate()) + "," + new SimpleDateFormat("yyyy-MM-dd").format(b.getReturnDate()));
+                if (b.getId() == borrowId) {
+                    writer.println(b.getId() + "," + b.getUserId() + "," + b.getBookId() + "," + new SimpleDateFormat("yyyy-MM-dd").format(b.getBorrowDate()) + "," + new SimpleDateFormat("yyyy-MM-dd").format(b.getReturnDate()));
+                }
             }
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
 
+        // Update borrow list
+        borrowList.remove(borrow);
         displaySuccessMessage("The book has been returned successfully.");
+        getBorrowList();
     }
 
     // Get a borrow by ID
@@ -182,6 +192,25 @@ public class BorrowController {
     
     //Returns a borrow list when called
     public List<Borrow> getBorrowList() {
+        borrowList.clear(); // clear the existing list
+        try (BufferedReader reader = new BufferedReader(new FileReader("borrows.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                int id = Integer.parseInt(parts[0]);
+                int userId = Integer.parseInt(parts[1]);
+                int bookId = Integer.parseInt(parts[2]);
+                Date borrowDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[3]);
+                Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[4]);
+                Borrow borrow = new Borrow(id, userId, bookId, borrowDate, returnDate);
+                borrowList.add(borrow);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading from file: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error parsing date: " + e.getMessage());
+        }
+        this.borrowList = borrowList;
         return borrowList;
     }
     // Display an error message in a dialog box

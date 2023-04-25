@@ -11,16 +11,12 @@ import models.Borrow;
 import java.awt.BorderLayout;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
-import models.User;
-import utils.SessionManager;
 
 public class BorrowView extends JPanel{
     private JTable table;
     private DefaultTableModel model;
-
-    public BorrowView(BorrowController borrowController) {
-        User currentUser = (User) SessionManager.getInstance().get("currentUser"); 
+    private BorrowController borrowController = new BorrowController();
+    public BorrowView() {
         setLayout(new BorderLayout(0, 0));
 
         JScrollPane scrollPane = new JScrollPane();
@@ -32,13 +28,12 @@ public class BorrowView extends JPanel{
                 return false; // make all cells non-editable
             }
         };
-        table.setModel(model);
-        scrollPane.setViewportView(table);
-
         displayAllBorrows(borrowController.getBorrowList());
+        table.setModel(model);
+        scrollPane.setViewportView(table);        
     }
 
-    void displayAllBorrows(List<Borrow> borrowList) {
+    public void displayAllBorrows(List<Borrow> borrowList) {
         BorrowController borrowController = new BorrowController();
         model.setRowCount(0); // clear the table before adding new rows
         for (Borrow borrow : borrowList) {
@@ -48,7 +43,6 @@ public class BorrowView extends JPanel{
             Date borrowDate = borrow.getBorrowDate();
             Date returnDate = borrow.getReturnDate();
             boolean overdue = new Date().after(returnDate);
-
             model.addRow(new Object[]{borrowId, bookName, userName, borrowDate, returnDate, overdue});
         }
     }

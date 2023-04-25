@@ -3,21 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/UserView.java</file>
             <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/LoginView.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/BorrowView.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/models/User.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/RegistrationView.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/utils/PasswordHasher.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/IndexView.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/Main.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/utils/SessionManager.java</file>
+            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/UserView.java</file>
             <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/BookView.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/controllers/UserController.java</file>
+            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/BorrowView.java</file>
+            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/RegistrationView.java</file>
             <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/controllers/BorrowController.java</file>
+            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/controllers/UserController.java</file>
             <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/controllers/BookController.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/models/Borrow.java</file>
-            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/models/Book.java</file>
+            <file>file:/C:/Users/Admin/OneDrive%20-%20Greenwich%20Vietnam/Documents/NetBeansProjects/LibraryManagementDemo/src/views/IndexView.java</file>
         </group>
     </open-files>
 </project-private>

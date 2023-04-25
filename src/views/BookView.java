@@ -32,8 +32,9 @@ public class BookView extends JPanel {
     private JButton updateButton;
     private JButton borrowButton; 
     private BorrowController borrowController = new BorrowController();
+    public BorrowView borrowView = new BorrowView();
     public BookView() {
- 
+        
         BookController bookController = new BookController();
         User currentUser = (User) SessionManager.getInstance().get("currentUser");
 
@@ -52,101 +53,123 @@ public class BookView extends JPanel {
 
         // Add the CRUD buttons for only for users with "ADM" role
         if (currentUser.getUserRole() != null && currentUser.getUserRole().equals("ADM")) {
-        // Create the panel for the buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+            // Create the panel for the buttons
+            JPanel buttonPanel = new JPanel(new FlowLayout());
 
-        // Create the add button and add an action listener
-        addButton = new JButton("Add");
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                BookController bookController = new BookController();
-                // Open a dialog to add a new book
-                BookDialog bookDialog = new BookDialog(bookController);
-                bookDialog.setVisible(true);
-            }
-        });
-        buttonPanel.add(addButton);
+            // Create the add button and add an action listener
+            addButton = new JButton("Add");
+            addButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Open a dialog to add a new book
+                    BookDialog bookDialog = new BookDialog(bookController);
+                    bookDialog.setVisible(true);
+                }
+            });
+            buttonPanel.add(addButton);
 
-        // Create the delete button and add an action listener
-        deleteButton = new JButton("Delete");
-        deleteButton.setEnabled(false);
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                BookController bookController = new BookController();
-                int selectedRow = bookTable.getSelectedRow();
-                int id = (int) tableModel.getValueAt(selectedRow, 0);
-                bookController.removeBook(id);
-                deleteButton.setEnabled(false);
-                updateButton.setEnabled(false);
-                displayAllBooks(bookController.getAllBooks());
-            }
-        });
-        buttonPanel.add(deleteButton);
+            // Create the delete button and add an action listener
+            deleteButton = new JButton("Delete");
+            deleteButton.setEnabled(false);
+            deleteButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int selectedRow = bookTable.getSelectedRow();
+                    int id = (int) tableModel.getValueAt(selectedRow, 0);
+                    bookController.removeBook(id);
+                    deleteButton.setEnabled(false);
+                    updateButton.setEnabled(false);
+                    displayAllBooks(bookController.getAllBooks());
+                }
+            });
+            buttonPanel.add(deleteButton);
 
-        // Create the update button and add an action listener
-        updateButton = new JButton("Update");
-        updateButton.setEnabled(false);
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                BookController bookController = new BookController();
-                int selectedRow = bookTable.getSelectedRow();
-                int id = (int) tableModel.getValueAt(selectedRow, 0);
+            // Create the update button and add an action listener
+            updateButton = new JButton("Update");
+            updateButton.setEnabled(false);
+            updateButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int selectedRow = bookTable.getSelectedRow();
+                    int id = (int) tableModel.getValueAt(selectedRow, 0);
 
-                // Get the book by ID and open a dialog to update it
-                Book book = bookController.getBookById(id);
-                BookDialog bookDialog = new BookDialog(bookController, book);
-                bookDialog.setVisible(true);
+                    // Get the book by ID and open a dialog to update it
+                    Book book = bookController.getBookById(id);
+                    BookDialog bookDialog = new BookDialog(bookController, book);
+                    bookDialog.setVisible(true);
 
-                deleteButton.setEnabled(false);
-                updateButton.setEnabled(false);
-            }
-        });
-        buttonPanel.add(updateButton);
+                    deleteButton.setEnabled(false);
+                    updateButton.setEnabled(false);
+                    displayAllBooks(bookController.getAllBooks());
+                }
+            });
+            buttonPanel.add(updateButton);
+            
+            borrowButton = new JButton("Borrow");
+            borrowButton.setEnabled(false);
+            borrowButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int selectedRow = bookTable.getSelectedRow();
+                    int bookId = (int) tableModel.getValueAt(selectedRow, 0);
+                    int userId = currentUser.getId();
+                    borrowController.addBorrow(userId, bookId);
+                    displayAllBooks(bookController.getAllBooks());
+                }
+            });
+            buttonPanel.add(borrowButton);
+            
+            // Add the scroll pane and button panel to the view
+            setLayout(new BorderLayout());
+            add(scrollPane, BorderLayout.CENTER);
+            add(buttonPanel, BorderLayout.SOUTH);
 
-        // Create the borrow button and add an action listener
-        borrowButton = new JButton("Borrow");
-        borrowButton.setEnabled(false);
-        borrowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                BookController bookController = new BookController();
-                int selectedRow = bookTable.getSelectedRow();
-                int bookId = (int) tableModel.getValueAt(selectedRow, 0);
-                int userId = currentUser.getId();
-                borrowController.addBorrow(userId, bookId);
-                displayAllBooks(bookController.getAllBooks());
-            }
-        });
-        buttonPanel.add(borrowButton);
-
-        // Add the scroll pane and button panel to the view
-        setLayout(new BorderLayout());
-        add(scrollPane, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        // Add a selection listener to the table to enable/disable the delete, update, and borrow buttons
-        bookTable.getSelectionModel().addListSelectionListener(e -> {
-            boolean enabled = bookTable.getSelectedRow() != -1;
-            deleteButton.setEnabled(enabled);
-            updateButton.setEnabled(enabled);
-            borrowButton.setEnabled(enabled);
-        });
-        } 
-        add(scrollPane, BorderLayout.CENTER);
+            // Add a selection listener to the table to enable/disable the delete, update, and borrow buttons
+            bookTable.getSelectionModel().addListSelectionListener(e -> {
+                boolean enabled = bookTable.getSelectedRow() != -1;
+                deleteButton.setEnabled(enabled);
+                updateButton.setEnabled(enabled);
+                borrowButton.setEnabled(enabled);
+            });
+        } else {
+            // Create the panel for the buttons
+            JPanel buttonPanel = new JPanel(new FlowLayout());
+            // Create the borrow button and add an action listener
+            borrowButton = new JButton("Borrow");
+            borrowButton.setEnabled(false);
+            borrowButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int selectedRow = bookTable.getSelectedRow();
+                    int bookId = (int) tableModel.getValueAt(selectedRow, 0);
+                    int userId = currentUser.getId();
+                    borrowController.addBorrow(userId, bookId);
+                    displayAllBooks(bookController.getAllBooks());
+                }
+            });
+            buttonPanel.add(borrowButton);
+            bookTable.getSelectionModel().addListSelectionListener(e -> {
+                boolean enabled = bookTable.getSelectedRow() != -1;
+                borrowButton.setEnabled(enabled);
+            });
+            // Add the scroll pane to the view for non-admin users
+            // Add the scroll pane and button panel to the view
+            setLayout(new BorderLayout());
+            add(scrollPane, BorderLayout.CENTER);
+            add(buttonPanel, BorderLayout.SOUTH);
+        }
 
         displayAllBooks(bookController.getAllBooks()); // display all books when the view is created
     }
 
     public void displayAllBooks(List<Book> bookList) {
-        tableModel.setRowCount(0);
+        tableModel.setRowCount(0); // clear the table before adding new rows
         for (Book book : bookList) {
             Object[] rowData = {book.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getQuantity()};
             tableModel.addRow(rowData);
-        }
+        } 
     }
+    
     private class BookDialog extends JDialog {
         private JTextField titleField;
         private JTextField authorField;
