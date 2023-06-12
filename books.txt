@@ -6,5 +6,4 @@
 6,Ruby Programming,Sarah Lee,A book about Ruby,9
 7,Swift Programming,David Kim,A book about Swift,6
 8,SQL Programming,Karen Chen,A book about SQL,2
-9,HTML Programming,James Lee,A book about HTML,14
-10,CSS Programming,Emily Wang,A book about CSS,3
+10,CSS Programming,Emily Wang,A book about CSS,7
